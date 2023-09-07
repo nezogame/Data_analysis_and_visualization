@@ -1,8 +1,17 @@
 import tkinter as tk
 from tkinter import ttk
+from collections import OrderedDict
+from Window import BaseWindow
 
-class FrequencyTable:
+class Singleton(type):
+    _instances = {}
 
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
+
+class FrequencyTable(BaseWindow,    metaclass=Singleton):
     def __init__(self,data):
         self.frequency_table_dictionary = dict()
         self.__data = data
