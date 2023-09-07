@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog
-from Window import Window
+from MainGUIWindow import Window
 
 def main():
     window = Window()

@@ -1,37 +1,42 @@
 import tkinter as tk
-from tkinter import filedialog
-from PIL import ImageTk, Image
-from FileReader import FileReader
+from tkinter import ttk
+class BaseWindow:
+    def __init__(self,data):
+        self.__root = tk.Tk()
+        self.__data = data
+        self.__root.protocol("WM_DELETE_WINDOW", self.on_closing)
 
+    def __eq__(self, __o: object) -> bool:
+        return super().__eq__(__o)
 
-class Window:
-    IMG = Image.open("img\\browse-document-icon.png")
-    IMG = IMG.resize((22, 22), Image.LANCZOS)
-    def __init__(self):
-        self.root = tk.Tk()
-        self.root.title("Data analysis")
-        self.root.geometry("500x500")
-        # Set window background color
-        self.root.config(background="#272822")
-        self.root.resizable(False,False)
-        self.browse_img =  ImageTk.PhotoImage(self.IMG)
-        self.question_inscription = tk.Label(self.root,text="Hello dude, do you want some magic???",font=25).place(x=100,y=30)
-        self.inviting_inscription = tk.Label(self.root,text="If your answer is yes just ",font=25).place(x=100,y=65)
-        self.file_path_field  = tk.Entry(self.root,width=200)
-        self.file_path_field.place(x=50,y=325, height=22,width=340)
-        self.btn_get_path = tk.Button(self.root, image=self.browse_img,
-                                      command=lambda :self.browse_files(self.file_path_field)).place(x=400,y=325, height=22)
-        self.btn_submit = tk.Button(self.root, text="Submit", justify="center", command=lambda : self.print(self.file_path_field.get()))
-        self.btn_submit.place(x=380,y=355)
+    def __ne__(self, __o: object) -> bool:
+        return super().__ne__(__o)
 
-    def run(self):
-        self.root.mainloop()
+    def __str__(self) -> str:
+        return super().__str__()
 
-    def browse_files(self, entry_field):
-        path = filedialog.askopenfilename()
-        entry_field.delete(0,tk.END)
-        entry_field.insert(0,path)
+    def __repr__(self) -> str:
+        return super().__repr__()
 
-    def print(self,file_path):
-        file_reader = FileReader(file_path)
-        file_reader.print_all_data()
+    def __hash__(self) -> int:
+        return super().__hash__()
+
+    def __sizeof__(self) -> int:
+        return super().__sizeof__()
+
+    def get_data(self):
+        return self.__data
+
+    def set_data(self,data):
+        try:
+            self.__data = data
+        except Exception as e:
+            print(self.__class__.__repr__()+"\nException message "+e)
+
+    def get_root(self):
+        return self.__root
+
+    def set_root(self, tk):
+        self.__root = tk
+    def on_closing(self):
+        self.__root.withdraw()
