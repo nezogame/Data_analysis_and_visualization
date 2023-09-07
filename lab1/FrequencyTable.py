@@ -1,4 +1,5 @@
 import tkinter as tk
+import numpy as np
 from tkinter import ttk
 from collections import OrderedDict
 from Window import BaseWindow
@@ -27,10 +28,13 @@ class FrequencyTable(BaseWindow,    metaclass=Singleton):
         self.get_root().deiconify()
 
     def add_frequency(self):
-        freqency_map = self.count_frequency()
+        freqency_map = self.calculate_frequency()
         self.add_number_column(len(freqency_map.items()))
         self.add_value_colum(freqency_map.keys())
         self.add_frequency_column(freqency_map.values())
+        relative_frequency = self.calculate_relative_frequency(freqency_map.values())
+        self.add_relative_frequency_column(relative_frequency)
+        self.add_empirical_function_column(self.calculate_empirical_distribution(relative_frequency,len(freqency_map.values())))
 
     def add_number_column(self,numbers):
         sequence = list(range(1,numbers+1))
@@ -45,10 +49,10 @@ class FrequencyTable(BaseWindow,    metaclass=Singleton):
     def add_relative_frequency_column(self,relative_frequency_data):
         self.frequency_table_dictionary.update({"Relative Frequency": relative_frequency_data})
 
-    def add_relative_frequency_column(self,empirical_distribution_data ):
-        self.frequency_table_dictionary.update({"EVDF": empirical_distribution_data })
+    def add_empirical_function_column(self,empirical_distribution_data ):
+        self.frequency_table_dictionary.update({"ECDF": empirical_distribution_data })
 
-    def count_frequency(self):
+    def calculate_frequency(self):
         map = dict()
         print(self.get_data())
         for i in range(len(self.get_data())):
@@ -58,6 +62,12 @@ class FrequencyTable(BaseWindow,    metaclass=Singleton):
                     map[self.get_data()[i]] = 1
         return OrderedDict(sorted(map.items()))
 
+    def calculate_relative_frequency(self,data):
+        return [i/sum(data) for i in data]
+
+    def calculate_empirical_distribution(self, data,n):
+        return [sum(data[:i + 1]) for i in range(n)]
+
     def create_table(self):
 
 
@@ -66,7 +76,7 @@ class FrequencyTable(BaseWindow,    metaclass=Singleton):
         for column in self.frequency_table_dictionary.keys():
             try:
                 self.get_table().heading(column, text=column)
-                self.get_table().column(column, width=100)
+                self.get_table().column(column, width=150)
             except Exception as e:
                 self.set_table(None)
                 print(e)
