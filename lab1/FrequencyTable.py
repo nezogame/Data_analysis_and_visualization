@@ -3,23 +3,16 @@ import numpy as np
 from tkinter import ttk
 from collections import OrderedDict
 from Window import BaseWindow
-
-class Singleton(type):
-    _instances = {}
-
-    def __call__(cls, *args, **kwargs):
-        if cls not in cls._instances:
-            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
-        return cls._instances[cls]
+from Window import Singleton
 
 class FrequencyTable(BaseWindow,    metaclass=Singleton):
-    def __init__(self,data):
+    def __init__(self, data):
         super().__init__(data)
         self.frequency_table_dictionary = dict()
         self.get_root().title("Frequency Table")
         self.__table: ttk.Treeview = None
 
-    def add_to_dictionary(self,column_name,data):
+    def add_to_dictionary(self,column_name, column_data):
         self.frequency_table_dictionary.update({column_name:data})
 
     def display(self):
@@ -29,28 +22,12 @@ class FrequencyTable(BaseWindow,    metaclass=Singleton):
 
     def add_frequency(self):
         freqency_map = self.calculate_frequency()
-        self.add_number_column(len(freqency_map.items()))
-        self.add_value_colum(freqency_map.keys())
-        self.add_frequency_column(freqency_map.values())
+        self.add_to_dictionary("№ option",list(range(1,len(freqency_map.items())+1)))
+        self.add_to_dictionary("Values",freqency_map.keys())
+        self.add_to_dictionary("Frequency",freqency_map.values())
         relative_frequency = self.calculate_relative_frequency(freqency_map.values())
-        self.add_relative_frequency_column(relative_frequency)
-        self.add_empirical_function_column(self.calculate_empirical_distribution(relative_frequency,len(freqency_map.values())))
-
-    def add_number_column(self,numbers):
-        sequence = list(range(1,numbers+1))
-        self.frequency_table_dictionary.update({"№ option":sequence})
-
-    def add_value_colum(self,data):
-        self.frequency_table_dictionary.update({"Values":data})
-
-    def add_frequency_column(self,frequency_data):
-        self.frequency_table_dictionary.update({"Frequency": frequency_data})
-
-    def add_relative_frequency_column(self,relative_frequency_data):
-        self.frequency_table_dictionary.update({"Relative Frequency": relative_frequency_data})
-
-    def add_empirical_function_column(self,empirical_distribution_data ):
-        self.frequency_table_dictionary.update({"ECDF": empirical_distribution_data })
+        self.add_to_dictionary("Relative Frequency",relative_frequency)
+        self.add_to_dictionary("ECDF",self.calculate_empirical_distribution(relative_frequency,len(freqency_map.items())))
 
     def calculate_frequency(self):
         map = dict()
