@@ -4,6 +4,7 @@ from PIL import ImageTk, Image
 from FileReader import FileReader
 from random import randrange
 from Controller import f_table
+from Controller import f_distribution_table
 
 class Window:
     __IMG = Image.open("img\\browse-document-icon.png")
@@ -19,7 +20,7 @@ class Window:
         self.question_inscription = tk.Label(self.root,text="Hello dude, do you want some magic???",font=25).place(x=60,y=30)
         self.inviting_inscription = tk.Label(self.root,text="If your answer is yes just select an option",font=25).place(x=60,y=65)
         self.frequency_chekbox = tk.Checkbutton(self.root,text="Build frequency table", command=self.test,onvalue=1,offvalue=0).place(x=60,y=130)
-        self.frequency_chekbox = tk.Checkbutton(self.root,text="2").place(x=60,y=160)
+        self.frequency_chekbox = tk.Checkbutton(self.root,text="Split frequencies table into classes").place(x=60,y=160)
         self.frequency_chekbox = tk.Checkbutton(self.root,text="3").place(x=60,y=190)
         self.frequency_chekbox = tk.Checkbutton(self.root,text="4").place(x=60,y=220)
         self.frequency_chekbox = tk.Checkbutton(self.root,text="5").place(x=60,y=250)
@@ -55,6 +56,7 @@ class Window:
         else:
             self.hide_error_frong_file()
             f_table(file_reader.get_file_object())
+            f_distribution_table(file_reader.get_file_object())
 
     def hide_error_frong_file(self):
         self.error_label.place_forget()
