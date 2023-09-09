@@ -3,14 +3,7 @@ import numpy as np
 from tkinter import ttk
 from collections import OrderedDict
 from Window import BaseWindow
-
-class Singleton(type):
-    _instances = {}
-
-    def __call__(cls, *args, **kwargs):
-        if cls not in cls._instances:
-            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
-        return cls._instances[cls]
+from Window import Singleton
 
 class FrequencyTable(BaseWindow,    metaclass=Singleton):
     def __init__(self,data):
