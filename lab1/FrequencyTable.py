@@ -13,7 +13,7 @@ class FrequencyTable(BaseWindow,    metaclass=Singleton):
         self.__table: ttk.Treeview = None
 
     def add_to_dictionary(self,column_name, column_data):
-        self.frequency_table_dictionary.update({column_name:data})
+        self.frequency_table_dictionary.update({column_name:column_data})
 
     def display(self):
         self.add_frequency()
@@ -31,7 +31,6 @@ class FrequencyTable(BaseWindow,    metaclass=Singleton):
 
     def calculate_frequency(self):
         map = dict()
-        print(self.get_data())
         for i in range(len(self.get_data())):
             if self.get_data()[i] in map.keys():
                 map[self.get_data()[i]] +=1
@@ -46,8 +45,6 @@ class FrequencyTable(BaseWindow,    metaclass=Singleton):
         return [sum(data[:i + 1]) for i in range(n)]
 
     def create_table(self):
-
-
         self.set_table(ttk.Treeview(self.get_root(), columns=list(self.frequency_table_dictionary.keys()), show='headings'))
 
         for column in self.frequency_table_dictionary.keys():
