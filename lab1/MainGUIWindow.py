@@ -13,21 +13,20 @@ class Window:
         self.root = tk.Tk()
         self.root.title("Data analysis")
         self.root.geometry("500x600")
-        # Set window background color
         self.root.config(background="#272822")
         self.root.resizable(False,False)
         self.browse_img =  ImageTk.PhotoImage(self.__IMG)
         self.question_inscription = tk.Label(self.root,text="Hello dude, do you want some magic???",font=25).place(x=60,y=30)
         self.inviting_inscription = tk.Label(self.root,text="If your answer is yes just select an option",font=25).place(x=60,y=65)
-        self.frequency_chekbox = tk.Checkbutton(self.root,text="Build frequency table", command=self.test,onvalue=1,offvalue=0).place(x=60,y=130)
-        self.frequency_chekbox = tk.Checkbutton(self.root,text="Split frequencies table into classes").place(x=60,y=160)
-        self.frequency_chekbox = tk.Checkbutton(self.root,text="3").place(x=60,y=190)
-        self.frequency_chekbox = tk.Checkbutton(self.root,text="4").place(x=60,y=220)
-        self.frequency_chekbox = tk.Checkbutton(self.root,text="5").place(x=60,y=250)
-        self.frequency_chekbox = tk.Checkbutton(self.root,text="6").place(x=60,y=280)
-        self.frequency_chekbox = tk.Checkbutton(self.root,text="7").place(x=60,y=310)
-        self.frequency_chekbox = tk.Checkbutton(self.root,text="8").place(x=60,y=340)
-        self.frequency_chekbox = tk.Checkbutton(self.root,text="9").place(x=60,y=370)
+        self.frequency_chekbox = tk.Label(self.root,text="Build frequency table").place(x=60,y=130)
+        self.frequency_chekbox = tk.Label(self.root,text="Split frequencies table into classes").place(x=60,y=160)
+        self.frequency_chekbox = tk.Label(self.root,text="3").place(x=60,y=190)
+        self.frequency_chekbox = tk.Label(self.root,text="4").place(x=60,y=220)
+        self.frequency_chekbox = tk.Label(self.root,text="5").place(x=60,y=250)
+        self.frequency_chekbox = tk.Label(self.root,text="6").place(x=60,y=280)
+        self.frequency_chekbox = tk.Label(self.root,text="7").place(x=60,y=310)
+        self.frequency_chekbox = tk.Label(self.root,text="8").place(x=60,y=340)
+        self.frequency_chekbox = tk.Label(self.root,text="9").place(x=60,y=370)
         self.file_path_field  = tk.Entry(self.root,width=200,bg="#D3D3D3")
         self.file_path_field.place(x=50,y=460, height=22,width=340)
         self.error_label = tk.Label(self.root,
@@ -64,6 +63,3 @@ class Window:
     def display_error_frong_file(self):
         self.file_path_field.config(highlightbackground = "red",highlightcolor="red",highlightthickness=2)
         self.error_label.place(x=40, y=520)
-
-    def test(self):
-        print(self.frequency_chekbox)

@@ -9,11 +9,9 @@ def f_table(data):
                 __table.set_data(data)
         __table.display()
 
-def f_distribution_table(data,number_of_class = -1):
+def f_distribution_table(data):
         __dist_table = FrequencyDistributionTable(data)
         if not (__dist_table is None or np.array_equiv(__dist_table.get_data(), data)):
                 __dist_table.set_data(data)
                 __dist_table.set_number_of_classes(__dist_table.find_number_of_classes(len(data)))
-        if number_of_class != -1:
-                __dist_table.set_number_of_classes(number_of_class)
         __dist_table.display()
