@@ -21,8 +21,8 @@ def create_frequency_distribution_table(data):
                 __dist_table.set_data(data)
                 __dist_table.set_number_of_classes(__dist_table.find_number_of_classes(len(data)))
         __dist_table.display()
-        create_histogram([__dist_table.frequency_distribution_table_dictionary.get("Class Width"),
-                          __dist_table.frequency_distribution_table_dictionary.get("Relative Frequency")])
+        create_histogram([__dist_table.get_dictionary().get("Class Width"),
+                          __dist_table.get_dictionary().get("Relative Frequency")])
 
 def create_histogram(data):
 
