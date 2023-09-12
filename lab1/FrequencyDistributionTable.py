@@ -37,6 +37,8 @@ class FrequencyDistributionTable(BaseWindow, metaclass=Singleton):
     def set_table(self, treeview):
         self.__table = treeview
 
+    def get_dictionary(self):
+        return self.frequency_distribution_table_dictionary
     def add_to_dictionary(self, column_name, column_data):
         self.frequency_distribution_table_dictionary.update({column_name: column_data})
 
@@ -56,7 +58,7 @@ class FrequencyDistributionTable(BaseWindow, metaclass=Singleton):
     def add_frequency(self):
         freqency_map = self.calculate_frequency_distribution()
         self.add_to_dictionary("№ class", list(range(1,self.get_number_of_classes()+1)))
-        self.add_to_dictionary("class Width", freqency_map.keys())
+        self.add_to_dictionary("Class Width", freqency_map.keys())
         self.add_to_dictionary("Frequency",freqency_map.values())
         relative_frequency = self.calculate_relative_frequency(freqency_map.values())
         self.add_to_dictionary("Relative Frequency",relative_frequency)
@@ -77,7 +79,7 @@ class FrequencyDistributionTable(BaseWindow, metaclass=Singleton):
                 frequency = len([x for x in self.get_data() if lower_bound <= x <= upper_bound])
             else:
                 frequency = len([x for x in self.get_data() if lower_bound <= x < upper_bound])
-            frquency_map[f"[{lower_bound} : {upper_bound}]"]=frequency
+            frquency_map[f"[{round(lower_bound,3)} : {round(upper_bound,3)}]"]=frequency
         return frquency_map
 
     def calculate_relative_frequency(self,data):
