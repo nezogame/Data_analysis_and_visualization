@@ -3,8 +3,8 @@ from tkinter import filedialog
 from PIL import ImageTk, Image
 from FileReader import FileReader
 from random import randrange
-from Controller import f_table
-from Controller import f_distribution_table
+from Controller import create_frequency_table
+from Controller import create_table_tab
 
 class Window:
     __IMG = Image.open("img\\browse-document-icon.png")
@@ -54,8 +54,7 @@ class Window:
             print(e)
         else:
             self.hide_error_frong_file()
-            f_table(file_reader.get_file_object())
-            f_distribution_table(file_reader.get_file_object())
+            create_table_tab(file_reader.get_file_object())
 
     def hide_error_frong_file(self):
         self.error_label.place_forget()
