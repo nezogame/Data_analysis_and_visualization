@@ -3,6 +3,8 @@ import numpy as np
 from tkinter import ttk
 from Window import BaseWindow
 from Window import Singleton
+from Histogram import BarPlot
+from Graph import Graph
 
 class FrequencyDistributionTable(BaseWindow, metaclass=Singleton):
 
@@ -18,7 +20,7 @@ class FrequencyDistributionTable(BaseWindow, metaclass=Singleton):
         self.__number_of_classes = self.find_number_of_classes(len(data))
         self.current_value.set(self.__number_of_classes)
         self.__table: ttk.Treeview = None
-
+        self.__graph_table = None
 
     def get_number_of_classes(self):
         return self.__number_of_classes
@@ -39,6 +41,10 @@ class FrequencyDistributionTable(BaseWindow, metaclass=Singleton):
 
     def get_dictionary(self):
         return self.frequency_distribution_table_dictionary
+
+    def get_graph_table(self):
+        return self.__graph_table
+
     def add_to_dictionary(self, column_name, column_data):
         self.frequency_distribution_table_dictionary.update({column_name: column_data})
 
@@ -54,6 +60,15 @@ class FrequencyDistributionTable(BaseWindow, metaclass=Singleton):
         self.add_frequency()
         self.create_distribution_table()
         self.get_root().deiconify()
+        self.create_histogram()
+
+    def create_histogram(self):
+        __graph_data = [self.get_dictionary().get("Class Width"),
+                        self.get_dictionary().get("Relative Frequency")]
+        if not (self.get_graph_table() is None or np.array_equiv(self.get_graph_table().get_data(), __graph_data)):
+            self.__graph_table.destroy_window()
+        self.__graph_table = Graph(__graph_data)
+        self.__graph_table.display(BarPlot, "Histogram")
 
     def add_frequency(self):
         freqency_map = self.calculate_frequency_distribution()
@@ -63,7 +78,6 @@ class FrequencyDistributionTable(BaseWindow, metaclass=Singleton):
         relative_frequency = self.calculate_relative_frequency(freqency_map.values())
         self.add_to_dictionary("Relative Frequency",relative_frequency)
         self.add_to_dictionary("ECDF",self.calculate_empirical_distribution(relative_frequency,len(freqency_map.items())))
-
 
     def calculate_frequency_distribution(self):
         # Calculate the range of the data
@@ -115,4 +129,3 @@ class FrequencyDistributionTable(BaseWindow, metaclass=Singleton):
 
     def __hash__(self) -> int:
         return super().__hash__()
-
