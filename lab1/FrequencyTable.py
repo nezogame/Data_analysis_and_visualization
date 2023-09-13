@@ -36,7 +36,8 @@ class FrequencyTable(BaseWindow,    metaclass=Singleton):
                 map[self.get_data()[i]] +=1
             else:
                     map[self.get_data()[i]] = 1
-        return OrderedDict(sorted(map.items()))
+        return map
+        #return OrderedDict(sorted(map.items()))
 
     def calculate_relative_frequency(self,data):
         return [i/sum(data) for i in data]
