@@ -8,7 +8,7 @@ from Graph import Graph
 
 class FrequencyDistributionTable(BaseWindow, metaclass=Singleton):
 
-    def __init__(self, data):
+    def __init__(self, data, graph):
         super().__init__(data)
         self.current_value = tk.StringVar(self.get_root())
         self.label_enter_numner_classes = tk.Label(self.get_root(),text="Enter a number of classes").grid(row=0, column=1)
@@ -20,7 +20,7 @@ class FrequencyDistributionTable(BaseWindow, metaclass=Singleton):
         self.__number_of_classes = self.find_number_of_classes(len(data))
         self.current_value.set(self.__number_of_classes)
         self.__table: ttk.Treeview = None
-        self.__graph_table = None
+        self.__graph_table : Graph = graph
 
     def get_number_of_classes(self):
         return self.__number_of_classes
@@ -45,6 +45,8 @@ class FrequencyDistributionTable(BaseWindow, metaclass=Singleton):
     def get_graph_table(self):
         return self.__graph_table
 
+    def set_graph_table(self, graph_table):
+        self.__graph_table = graph_table
     def add_to_dictionary(self, column_name, column_data):
         self.frequency_distribution_table_dictionary.update({column_name: column_data})
 
@@ -65,10 +67,10 @@ class FrequencyDistributionTable(BaseWindow, metaclass=Singleton):
     def create_histogram(self):
         __graph_data = [self.get_dictionary().get("Class Width"),
                         self.get_dictionary().get("Relative Frequency")]
-        if not (self.get_graph_table() is None or np.array_equiv(self.get_graph_table().get_data(), __graph_data)):
-            self.__graph_table.destroy_window()
-        self.__graph_table = Graph(__graph_data)
-        self.__graph_table.display(BarPlot, "Histogram")
+        if not (self.get_graph_table() is None or np.array_equiv(self.get_graph_table().get_distribution_data(), __graph_data)):
+            self.__graph_table.hide_window()
+        self.__graph_table.set_distribution_data(__graph_data)
+        self.__graph_table.display_histogram("Histogram")
 
     def add_frequency(self):
         freqency_map = self.calculate_frequency_distribution()
