@@ -4,13 +4,15 @@ from tkinter import ttk
 from collections import OrderedDict
 from Window import BaseWindow
 from Window import Singleton
+from Graph import Graph
 
 class FrequencyTable(BaseWindow,    metaclass=Singleton):
-    def __init__(self, data):
+    def __init__(self, data, graph):
         super().__init__(data)
         self.frequency_table_dictionary = dict()
         self.get_root().title("Frequency Table")
         self.__table: ttk.Treeview = None
+        self.__empirical_distribution_table : Graph = graph
 
     def add_to_dictionary(self,column_name, column_data):
         self.frequency_table_dictionary.update({column_name:column_data})
@@ -19,7 +21,16 @@ class FrequencyTable(BaseWindow,    metaclass=Singleton):
         self.add_frequency()
         self.create_table()
         self.get_root().deiconify()
+        self.create_step_EDF()
 
+    def create_step_EDF(self):
+        __ECDF_data = [self.get_dictionary().get("Values"),
+                       self.get_dictionary().get("ECDF")]
+        if not (self.get_empirical_distribution_table() is None
+        or np.array_equiv(self.get_empirical_distribution_table().get_distribution_data(), __ECDF_data)):
+            self.__empirical_distribution_table.hide_window()
+        self.__empirical_distribution_table.set_frequncy_data(__ECDF_data)
+        self.__empirical_distribution_table.display_empirical_function("Empirical Distribution Function")
     def add_frequency(self):
         freqency_map = self.calculate_frequency()
         self.add_to_dictionary("№ option",list(range(1,len(freqency_map.items())+1)))
@@ -36,8 +47,8 @@ class FrequencyTable(BaseWindow,    metaclass=Singleton):
                 map[self.get_data()[i]] +=1
             else:
                     map[self.get_data()[i]] = 1
-        return map
-        #return OrderedDict(sorted(map.items()))
+        #return map
+        return OrderedDict(sorted(map.items()))
 
     def calculate_relative_frequency(self,data):
         return [i/sum(data) for i in data]
@@ -74,6 +85,15 @@ class FrequencyTable(BaseWindow,    metaclass=Singleton):
 
     def set_table(self,treeview):
         self.__table = treeview
+
+    def get_dictionary(self):
+        return self.frequency_table_dictionary
+
+    def get_empirical_distribution_table(self):
+        return self.__empirical_distribution_table
+
+    def set_empirical_distribution_table(self, graph_table):
+        self.__empirical_distribution_table = graph_table
 
     def __eq__(self, __o: object) -> bool:
         return super().__eq__(__o)

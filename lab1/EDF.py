@@ -1,24 +1,24 @@
-import matplotlib.pyplot as plt
 import numpy as np
 import tkinter as tk
 
-from tkinter import ttk
-from collections import OrderedDict
+import matplotlib.pyplot as plt
+import numpy as np
 from Plot import BasePlot
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
-from Window import Singleton
+from matplotlib.backends.backend_tkagg import NavigationToolbar2Tk
 
-class BarPlot(BasePlot):
+
+class EmpiricalDistributionPlot(BasePlot):
     def __init__(self, frame, title, data):
         super().__init__(frame, title, data)
 
     def plot(self):
-        self.ax.bar(self.data[0] , self.data[1], width =0.5, zorder=2)
+        self.ax.step(self.data[0] , self.data[1], where="post")
+        self.ax.set_title(self.title)
         self.figure.set_dpi(85)
         self.figure.set_size_inches(5, 5)
-        plt.xticks(rotation=30, ha='right')
-        plt.grid(axis='y', zorder=0)
-        self.ax.set_title(self.title)
+        plt.xlabel('Data Values')
+        plt.ylabel('Empirical Distribution Function (EDF)')
+        plt.grid(True)
 
     def create_plot(self,canvas):
         plt.tight_layout()
