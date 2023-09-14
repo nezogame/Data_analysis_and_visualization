@@ -1,8 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import tkinter as tk
-import numpy as np
-import matplotlib.pyplot as plt
+
 from tkinter import ttk
 from collections import OrderedDict
 from Plot import BasePlot

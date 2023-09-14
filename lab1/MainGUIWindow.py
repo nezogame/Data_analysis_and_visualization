@@ -2,22 +2,20 @@ import tkinter as tk
 from tkinter import filedialog
 from PIL import ImageTk, Image
 from FileReader import FileReader
-from random import randrange
 from Controller import Controller
 
 class Window:
     __IMG = Image.open("img\\browse-document-icon.png")
     __IMG = __IMG.resize((22, 22), Image.LANCZOS)
     def __init__(self):
-        self.controller = Controller()
         self.root = tk.Tk()
         self.root.title("Data analysis")
         self.root.geometry("500x600")
         self.root.config(background="#272822")
         self.root.resizable(False,False)
-        self.browse_img =  ImageTk.PhotoImage(self.__IMG)
+        self.browse_img = ImageTk.PhotoImage(self.__IMG)
         self.question_inscription = tk.Label(self.root,text="Hello dude, do you want some magic???",font=25).place(x=60,y=30)
-        self.inviting_inscription = tk.Label(self.root,text="If your answer is yes just select an option",font=25).place(x=60,y=65)
+        self.inviting_inscription = tk.Label(self.root,text="If your answer is yes just select a file and press submit",font=25).place(x=60,y=65)
         self.frequency_chekbox = tk.Label(self.root,text="Build frequency table").place(x=60,y=130)
         self.frequency_chekbox = tk.Label(self.root,text="Split frequencies table into classes").place(x=60,y=160)
         self.frequency_chekbox = tk.Label(self.root,text="3").place(x=60,y=190)
@@ -34,10 +32,12 @@ class Window:
                                              font="Arial 15")
         self.btn_get_path = tk.Button(self.root, image=self.browse_img,
                                       command=lambda :self.browse_files(self.file_path_field)).place(x=400,y=460, height=22)
-        self.btn_submit = tk.Button(self.root, text="Submit", justify="center", command=lambda : self.submit_selected(self.file_path_field.get()))
+        self.btn_submit = tk.Button(self.root, text="Submit", command=lambda : self.submit_selected(self.file_path_field.get()))
         self.btn_submit.place(x=380,y=490)
-
+        # some error can hapen if place controller initialization above tk.tk() https://stackoverflow.com/questions/23224574/tkinter-create-image-function-error-pyimage1-does-not-exist
+        self.controller: Controller = None
     def run(self):
+        self.controller =Controller(self.root)
         self.root.mainloop()
 
     def browse_files(self, entry_field):
