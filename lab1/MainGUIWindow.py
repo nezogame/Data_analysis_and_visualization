@@ -15,7 +15,7 @@ class Window:
         self.root.resizable(False,False)
         self.browse_img = ImageTk.PhotoImage(self.__IMG)
         self.question_inscription = tk.Label(self.root,text="Hello dude, do you want some magic???",font=25).place(x=60,y=30)
-        self.inviting_inscription = tk.Label(self.root,text="If your answer is yes just select a file and press submit",font=25).place(x=60,y=65)
+        self.inviting_inscription = tk.Label(self.root,text="If your answer is yes\n just select a file and press submit",font=25).place(x=60,y=65)
         self.frequency_chekbox = tk.Label(self.root,text="Build frequency table").place(x=60,y=130)
         self.frequency_chekbox = tk.Label(self.root,text="Split frequencies table into classes").place(x=60,y=160)
         self.frequency_chekbox = tk.Label(self.root,text="3").place(x=60,y=190)
