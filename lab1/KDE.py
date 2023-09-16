@@ -8,14 +8,15 @@ from scipy import stats
 from scipy.stats import gaussian_kde
 
 class KernelDensityEstimatePlot(BasePlot):
-    def __init__(self, frame, title, data):
-        self.bandwidth = np.std(data) * (len(data) ** (-1/5))
+    def __init__(self, frame, title, data, class_width):
+        self.bandwidth = np.std(data) * len(data) ** (-1/5)
+        self.class_width = class_width
         super().__init__(frame, title, data)
 
     def plot(self):
         kde = gaussian_kde(self.data, bw_method=self.bandwidth)
-        x_values = np.linspace(min(self.data),max(self.data),100)
-        kde_values = kde(x_values)
+        x_values = np.linspace(min(self.data), max(self.data), 100)
+        kde_values = kde(x_values) * self.class_width
         self.ax.clear()
         self.ax.plot(x_values, kde_values, color='red')
         self.ax.set_title(self.title)

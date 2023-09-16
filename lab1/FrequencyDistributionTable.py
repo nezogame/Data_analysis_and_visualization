@@ -21,6 +21,7 @@ class FrequencyDistributionTable(BaseWindow, metaclass=Singleton):
         self.current_value.set(self.__number_of_classes)
         self.__table: ttk.Treeview = None
         self.__graph_table : Graph = graph
+        self.class_width = None
 
     def get_number_of_classes(self):
         return self.__number_of_classes
@@ -86,11 +87,11 @@ class FrequencyDistributionTable(BaseWindow, metaclass=Singleton):
         data_range = max(self.get_data()) - min(self.get_data())
 
         # Calculate the class width
-        class_width = (float(data_range) / float(self.get_number_of_classes()))
+        self.class_width = (float(data_range) / float(self.get_number_of_classes()))
         frquency_map = dict()
         for i in range(self.get_number_of_classes()):
-            lower_bound = min(self.get_data()) + i * class_width
-            upper_bound = lower_bound + class_width
+            lower_bound = min(self.get_data()) + i * self.class_width
+            upper_bound = lower_bound + self.class_width
             if i == self.get_number_of_classes()-1:
                 frequency = len([x for x in self.get_data() if lower_bound <= x <= upper_bound])
             else:
@@ -103,6 +104,9 @@ class FrequencyDistributionTable(BaseWindow, metaclass=Singleton):
 
     def calculate_empirical_distribution(self, data,n):
         return [sum(data[:i + 1]) for i in range(n)]
+
+    def get_class_width(self):
+        return self.class_width
 
     def create_distribution_table(self):
         self.set_table(ttk.Treeview(self.get_root(),
