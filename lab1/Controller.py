@@ -11,6 +11,7 @@ class Controller:
 
     def create_table_tab(self, data):
         self.create_frequency_table(data)
+        self.create_kernel_density_estimation_table(data)
         self.create_frequency_distribution_table(data)
 
     def create_frequency_table(self, data):
@@ -25,3 +26,6 @@ class Controller:
             __dist_table.set_data(data)
             __dist_table.set_number_of_classes(__dist_table.find_number_of_classes(len(data)))
         __dist_table.display()
+
+    def create_kernel_density_estimation_table(self, data):
+        self.__graph_table.display_kernal_density(data, "KDE")
