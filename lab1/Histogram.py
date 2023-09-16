@@ -18,6 +18,7 @@ class BarPlot(BasePlot):
         self.figure.set_size_inches(5, 5)
         plt.xticks(rotation=30, ha='right')
         plt.grid(axis='y', zorder=0)
+        plt.ylabel('Freuency')
         self.ax.set_title(self.title)
 
     def create_plot(self,canvas):

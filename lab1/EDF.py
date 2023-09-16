@@ -12,7 +12,7 @@ class EmpiricalDistributionPlot(BasePlot):
         super().__init__(frame, title, data)
 
     def plot(self):
-        self.ax.step(self.data[0] , self.data[1], where="post")
+        self.ax.step(self.data[0] , self.data[1], where="pre")
         self.ax.set_title(self.title)
         self.figure.set_dpi(85)
         self.figure.set_size_inches(5, 5)

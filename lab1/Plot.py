@@ -14,5 +14,3 @@ class BasePlot:
 
     def plot(self):
         pass  # Implement this method in derived classes
-
-
