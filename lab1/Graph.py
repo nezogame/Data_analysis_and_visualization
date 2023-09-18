@@ -1,9 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from Histogram import BarPlot
+
 from EDF import EmpiricalDistributionPlot
-from KDE import KernelDensityEstimatePlot
+from Histogram import BarPlot
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
 
 class Graph:
     def __init__(self, root):
@@ -34,12 +35,6 @@ class Graph:
         print(self.__histogram_plot.get_bandwidth())
         self.current_bandwidth.set(self.__histogram_plot.get_bandwidth())
 
-    # def create_kde(self, data, title, class_width):
-    #     if self.__kernal_density:
-    #         for widget in self.__kernal_density.winfo_children():
-    #             widget.destroy()
-    #     self.__kernal_density = self.create_kde_graph(KernelDensityEstimatePlot, title, data, class_width)
-
     def update_bandwidth(self):
         new_bandwidth = float(self.current_bandwidth.get())
         self.update_kde_bandwidth(new_bandwidth)
@@ -56,6 +51,7 @@ class Graph:
             for widget in self.__empirical_function.winfo_children():
                 widget.destroy()
         self.__empirical_function = self.create_graph(EmpiricalDistributionPlot, title, self.frequncy_data, [0, 1])
+
     def create_graph(self, plot_type, title, data, place, save_plot:bool = False, original_data = None, class_width = None):
         frame = ttk.Frame(self.container)
         frame.grid(row=place[0], column=place[1])
@@ -66,13 +62,6 @@ class Graph:
             plot = plot_type(frame, title, data, original_data, class_width)
             self.__histogram_plot = plot
         canvas = FigureCanvasTkAgg(plot.figure, master=frame)
-        plot.create_plot(canvas)
-        return frame
-
-    def create_kde_graph(self, plot_type, title, data, class_width):
-        plot = plot_type(self.__histogram, self.__histogram_plot, title, data, class_width)
-        self.__kernal_density_plot = plot
-        canvas = FigureCanvasTkAgg( self.__histogram_plot.figure, master=self.__histogram)
         plot.create_plot(canvas)
         return frame
 
