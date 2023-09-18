@@ -71,7 +71,7 @@ class FrequencyDistributionTable(BaseWindow, metaclass=Singleton):
         if not (self.get_graph_table() is None or np.array_equiv(self.get_graph_table().get_distribution_data(), __graph_data)):
             self.__graph_table.hide_window()
         self.__graph_table.set_distribution_data(__graph_data)
-        self.__graph_table.display_histogram("Histogram")
+        self.__graph_table.display_histogram("Histogram", self.get_data(), self.class_width)
 
     def add_frequency(self):
         freqency_map = self.calculate_frequency_distribution()
