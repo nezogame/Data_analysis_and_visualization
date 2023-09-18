@@ -22,6 +22,7 @@ class FrequencyDistributionTable(BaseWindow, metaclass=Singleton):
         self.__table: ttk.Treeview = None
         self.__graph_table : Graph = graph
         self.class_width = None
+        self.middle_of_width = []
 
     def get_number_of_classes(self):
         return self.__number_of_classes
@@ -66,7 +67,7 @@ class FrequencyDistributionTable(BaseWindow, metaclass=Singleton):
         self.create_histogram()
 
     def create_histogram(self):
-        __graph_data = [self.get_dictionary().get("Class Width"),
+        __graph_data = [self.middle_of_width,
                         self.get_dictionary().get("Relative Frequency")]
         if not (self.get_graph_table() is None or np.array_equiv(self.get_graph_table().get_distribution_data(), __graph_data)):
             self.__graph_table.hide_window()
@@ -83,6 +84,7 @@ class FrequencyDistributionTable(BaseWindow, metaclass=Singleton):
         self.add_to_dictionary("ECDF",self.calculate_empirical_distribution(relative_frequency,len(freqency_map.items())))
 
     def calculate_frequency_distribution(self):
+        self.middle_of_width.clear()
         # Calculate the range of the data
         data_range = max(self.get_data()) - min(self.get_data())
 
@@ -96,6 +98,7 @@ class FrequencyDistributionTable(BaseWindow, metaclass=Singleton):
                 frequency = len([x for x in self.get_data() if lower_bound <= x <= upper_bound])
             else:
                 frequency = len([x for x in self.get_data() if lower_bound <= x < upper_bound])
+            self.middle_of_width.append(lower_bound+self.class_width/2)
             frquency_map[f"[{round(lower_bound,3)} : {round(upper_bound,3)}]"]=frequency
         return frquency_map
 
