@@ -1,9 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from Histogram import BarPlot
+
 from EDF import EmpiricalDistributionPlot
-from KDE import KernelDensityEstimatePlot
+from Histogram import BarPlot
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
 
 class Graph:
     def __init__(self, root):
@@ -21,49 +22,45 @@ class Graph:
         self.distribution_data = None
         self.frequncy_data = None
         self.__histogram: ttk.Frame = None
+        self.__histogram_plot: ttk.Frame = None
         self.__empirical_function: ttk.Frame = None
         self.__kernal_density: ttk.Frame = None
         self.__kernal_density_plot: ttk.Frame = None
 
-    def create_histogram(self, title):
+    def create_histogram(self, title, original_data, class_width):
         if self.__histogram:
             for widget in self.__histogram.winfo_children():
                 widget.destroy()
-        self.__histogram = self.create_graph(BarPlot, title, self.distribution_data,[0, 0])
-
-    def create_kde(self, data, title, class_width):
-        if self.__kernal_density:
-            for widget in self.__kernal_density.winfo_children():
-                widget.destroy()
-        self.__kernal_density = self.create_graph(KernelDensityEstimatePlot, title, data,[0, 1], True, class_width)
-        print(self.__kernal_density_plot.get_bandwidth())
-        self.current_bandwidth.set(self.__kernal_density_plot.get_bandwidth())
+        self.__histogram = self.create_graph(BarPlot, title, self.distribution_data,[0, 0],True, original_data, class_width)
+        print(self.__histogram_plot.get_bandwidth())
+        self.current_bandwidth.set(self.__histogram_plot.get_bandwidth())
 
     def update_bandwidth(self):
         new_bandwidth = float(self.current_bandwidth.get())
         self.update_kde_bandwidth(new_bandwidth)
 
     def update_kde_bandwidth(self, new_bandwidth):
-        for widget in self.__kernal_density.winfo_children():
+        for widget in self.__histogram.winfo_children():
             widget.destroy()
         print(new_bandwidth)
-        canvas = FigureCanvasTkAgg(self.__kernal_density_plot.figure, master=self.__kernal_density)
-        self.__kernal_density_plot.set_bandwidth(new_bandwidth, canvas)
+        canvas = FigureCanvasTkAgg(self.__histogram_plot.figure, master=self.__histogram)
+        self.__histogram_plot.set_bandwidth(new_bandwidth, canvas)
 
     def create_empirical_distribution_function(self, title):
         if self.__empirical_function:
             for widget in self.__empirical_function.winfo_children():
                 widget.destroy()
-        self.__empirical_function = self.create_graph(EmpiricalDistributionPlot, title, self.frequncy_data,[0, 2])
-    def create_graph(self, plot_type, title, data, place, save_plot:bool = False, class_width = None):
+        self.__empirical_function = self.create_graph(EmpiricalDistributionPlot, title, self.frequncy_data, [0, 1])
+
+    def create_graph(self, plot_type, title, data, place, save_plot:bool = False, original_data = None, class_width = None):
         frame = ttk.Frame(self.container)
         frame.grid(row=place[0], column=place[1])
-        if class_width==None:
+
+        if not save_plot:
             plot = plot_type(frame, title, data)
         else:
-            plot = plot_type(frame, title, data, class_width)
-        if save_plot:
-            self.__kernal_density_plot = plot
+            plot = plot_type(frame, title, data, original_data, class_width)
+            self.__histogram_plot = plot
         canvas = FigureCanvasTkAgg(plot.figure, master=frame)
         plot.create_plot(canvas)
         return frame
@@ -75,11 +72,11 @@ class Graph:
         self.controller_window.destroy()
         self.controller_window.quit()
 
-    def display_histogram(self, title):
-        self.create_histogram(title)
+    def display_histogram(self, title, original_data, class_width):
+        self.create_histogram(title, original_data, class_width)
         self.controller_window.deiconify()
 
-    def display___empirical_function(self, title):
+    def display_empirical_function(self, title):
         self.create_empirical_distribution_function(title)
         self.controller_window.deiconify()
 
