@@ -1,11 +1,11 @@
+import tkinter as tk
 import matplotlib.pyplot as plt
 import numpy as np
-import tkinter as tk
 
+from GaussianKDE import GaussianKDE
 from Plot import BasePlot
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
-from scipy import stats
-from scipy.stats import gaussian_kde
+
 
 class BarPlot(BasePlot):
     def __init__(self, frame, title, data, original_data, class_width):
@@ -15,15 +15,14 @@ class BarPlot(BasePlot):
         super().__init__(frame, title, data)
 
     def plot(self):
-        kde = gaussian_kde(self.original_data, bw_method=self.bandwidth)
+        kde = GaussianKDE(self.original_data, self.bandwidth)
         x_values = np.linspace(min(self.original_data), max(self.original_data), 100)
-        kde_values = kde(x_values) * self.class_width
+        kde_values = [x * self.class_width for x in kde.estimate_density(x_values)]
         self.ax.clear()
-        self.ax.bar(self.data[0] , self.data[1], width =0.5, zorder=2)
+        self.ax.bar(self.data[0] , self.data[1], width =self.class_width, zorder=2)
         self.ax.plot(x_values, kde_values, color='red')
         self.figure.set_dpi(85)
         self.figure.set_size_inches(5, 5)
-        plt.xticks(rotation=30, ha='right')
         plt.grid(axis='y', zorder=0)
         plt.ylabel('Freuency')
         self.ax.set_title(self.title)
