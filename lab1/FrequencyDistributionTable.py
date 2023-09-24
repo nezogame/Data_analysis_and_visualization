@@ -54,7 +54,7 @@ class FrequencyDistributionTable(BaseWindow, metaclass=Singleton):
 
     def find_number_of_classes(self,length):
         num_classes = int(length ** (1 / 2)) if length < 100 else int(length ** (1 / 3))
-        return num_classes-1 if length%2==0 else num_classes
+        return num_classes-1 if num_classes%2==0 else num_classes
 
     def recreate_table(self):
         self.set_number_of_classes(int(self.current_value.get()))
