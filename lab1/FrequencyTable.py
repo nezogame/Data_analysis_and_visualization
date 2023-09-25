@@ -21,8 +21,8 @@ class FrequencyTable(BaseWindow, metaclass=Singleton):
         self.btn_find_abnormal.grid(row=0, column=3)
         self.get_root().title("Frequency Table")
         self.__table: ttk.Treeview = None
-        self.__quant_table = QuantitativeCharacteristics(root)
         self.__graph_table: Graph = graph
+        self.__quant_table = QuantitativeCharacteristics(root, graph)
 
     def add_to_dictionary(self, column_name, column_data):
         self.frequency_table_dictionary.update({column_name: column_data})
@@ -33,6 +33,7 @@ class FrequencyTable(BaseWindow, metaclass=Singleton):
         self.get_root().deiconify()
         self.create_step_EDF()
         self.create_quantitative_table()
+        self.create_probability_plot()
 
     def create_step_EDF(self):
         __ECDF_data = [self.get_dictionary().get("Values"),
@@ -54,6 +55,16 @@ class FrequencyTable(BaseWindow, metaclass=Singleton):
             self.__graph_table.hide_window()
             self.__graph_table.set_abnormal_data(__data_for_abnormal)
         self.__graph_table.display_abnormal_values("Abnormal Values")
+
+    def create_probability_plot(self):
+        quantiles = [self.__quant_table.calculate_quantile(x) if x != self.get_dictionary()["ECDF"][-1] else None for x in self.get_dictionary()["ECDF"]]
+        __probability_data = [list(self.get_dictionary().get("Values")),
+                              quantiles]
+        if not (self.get_graph_table() is None or np.array_equiv(self.get_graph_table().get_probability_data(),
+                                                                 __probability_data)):
+            self.__graph_table.hide_window()
+            self.__graph_table.set_probability_data(__probability_data)
+        self.__graph_table.display_probability_paper("Probability Paper")
 
     def delete_abnormal_value(self):
         borders = self.__graph_table.find_normal_border()

@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-import math as math
+import math
 import numpy as np
 from scipy import stats
 from ProbabilityCoin import ProbabilityPaper
@@ -152,7 +152,7 @@ class QuantitativeCharacteristics:
         self.label_te = tk.Label(self.normal_split, text=f"tE = {te}")
         self.label_quantile = tk.Label(self.normal_split, text=f"Quantile = {student_quantile}")
 
-        if ta <= student_quantile and te <= student_quantile:
+        if abs(ta) <= student_quantile and abs(te) <= student_quantile:
             identification_result = "identified"
         else:
             identification_result = "not identified"
@@ -217,7 +217,7 @@ class QuantitativeCharacteristics:
             t = math.sqrt(-2 * math.log(1 - p))
             quantile = (t - ((C0 + C1 * t + C2 * t ** 2) / (1 + D1 * t + D2 * t ** 2 + D3 * t ** 3)))
         else:
-            t = math.sqrt(-2 * math.log(1 - p))
+            t = math.sqrt(-2 * math.log(p))
             quantile = -(t - ((C0 + C1 * t + C2 * t ** 2) / (1 + D1 * t + D2 * t ** 2 + D3 * t ** 3)))
 
         return quantile
