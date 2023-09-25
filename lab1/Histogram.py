@@ -9,25 +9,25 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolb
 
 class BarPlot(BasePlot):
     def __init__(self, frame, title, data, original_data, class_width):
-        self.bandwidth = np.std(original_data) * len(original_data) ** (-1/5)
+        self.bandwidth = np.std(original_data) * len(original_data) ** (-1 / 5)
         self.class_width = class_width
         self.original_data = original_data
         super().__init__(frame, title, data)
 
     def plot(self):
         kde = GaussianKDE(self.original_data, self.bandwidth)
-        x_values = np.linspace(min(self.original_data), max(self.original_data), 100)
+        x_values = np.linspace(min(self.original_data), max(self.original_data), len(self.original_data))
         kde_values = [x * self.class_width for x in kde.estimate_density(x_values)]
         self.ax.clear()
-        self.ax.bar(self.data[0] , self.data[1], width =self.class_width, zorder=2)
+        self.ax.bar(self.data[0], self.data[1], width=self.class_width, zorder=2)
         self.ax.plot(x_values, kde_values, color='red')
-        self.figure.set_dpi(85)
-        self.figure.set_size_inches(5, 5)
+        self.figure.set_dpi(65)
+        self.figure.set_size_inches(6, 6)
         plt.grid(axis='y', zorder=0)
         plt.ylabel('Freuency')
         self.ax.set_title(self.title)
 
-    def create_plot(self,canvas):
+    def create_plot(self, canvas):
         plt.tight_layout()
         canvas_widget = canvas.get_tk_widget()
         canvas_widget.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
@@ -35,7 +35,7 @@ class BarPlot(BasePlot):
         toolbar.update()
         canvas_widget.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
-    def set_bandwidth(self, new_bandwidth, canvas:FigureCanvasTkAgg):
+    def set_bandwidth(self, new_bandwidth, canvas: FigureCanvasTkAgg):
         self.bandwidth = new_bandwidth
         self.plot()
         self.create_plot(canvas)
