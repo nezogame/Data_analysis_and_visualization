@@ -3,6 +3,7 @@ from tkinter import ttk
 
 from EDF import EmpiricalDistributionPlot
 from Histogram import BarPlot
+from AbnormalValues import AbnormalValues
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
@@ -15,23 +16,28 @@ class Graph:
         self.current_bandwidth = tk.StringVar(self.controller_window)
         self.bandwidth_entry = tk.Entry(self.controller_window, textvariable=self.current_bandwidth)
         self.bandwidth_entry.pack(side=tk.TOP)
-        self.bandwidth_button = tk.Button(self.controller_window, text="Update Bandwidth", command=self.update_bandwidth )
+        self.bandwidth_button = tk.Button(self.controller_window, text="Update Bandwidth",
+                                          command=self.update_bandwidth)
         self.bandwidth_button.pack(side=tk.TOP)
         self.container = ttk.Frame(self.controller_window)
         self.container.pack(fill=tk.BOTH, expand=True)
         self.distribution_data = None
         self.frequncy_data = None
+        self.abnormal_data = None
         self.__histogram: ttk.Frame = None
         self.__histogram_plot: ttk.Frame = None
         self.__empirical_function: ttk.Frame = None
         self.__kernal_density: ttk.Frame = None
         self.__kernal_density_plot: ttk.Frame = None
+        self.__abnormal_value: ttk.Frame = None
+        self.__abnormal_plot: ttk.Frame = None
 
     def create_histogram(self, title, original_data, class_width):
         if self.__histogram:
             for widget in self.__histogram.winfo_children():
                 widget.destroy()
-        self.__histogram = self.create_graph(BarPlot, title, self.distribution_data,[0, 0],True, original_data, class_width)
+        self.__histogram = self.create_graph(BarPlot, title, self.distribution_data, [0, 0], True, original_data,
+                                             class_width)
         print(self.__histogram_plot.get_bandwidth())
         self.current_bandwidth.set(self.__histogram_plot.get_bandwidth())
 
@@ -52,7 +58,17 @@ class Graph:
                 widget.destroy()
         self.__empirical_function = self.create_graph(EmpiricalDistributionPlot, title, self.frequncy_data, [0, 1])
 
-    def create_graph(self, plot_type, title, data, place, save_plot:bool = False, original_data = None, class_width = None):
+    def create_abnormal_values_function(self, title, data):
+        if self.__abnormal_value:
+            for widget in self.__abnormal_value.winfo_children():
+                widget.destroy()
+        self.__abnormal_value = self.create_graph(AbnormalValues, title, data, [0, 2], abnormal_plot=True)
+
+    def find_normal_border(self):
+        return self.__abnormal_plot.find_start_index(), self.__abnormal_plot.find_end_index()
+
+    def create_graph(self, plot_type, title, data, place, save_plot: bool = False, original_data=None,
+                     class_width=None, abnormal_plot: bool = False):
         frame = ttk.Frame(self.container)
         frame.grid(row=place[0], column=place[1])
 
@@ -61,6 +77,8 @@ class Graph:
         else:
             plot = plot_type(frame, title, data, original_data, class_width)
             self.__histogram_plot = plot
+        if abnormal_plot:
+            self.__abnormal_plot = plot
         canvas = FigureCanvasTkAgg(plot.figure, master=frame)
         plot.create_plot(canvas)
         return frame
@@ -84,6 +102,14 @@ class Graph:
         self.create_kde(data, title, class_width)
         self.controller_window.deiconify()
 
+    def display_abnormal_values(self, title):
+        self.create_abnormal_values_function(title, self.get_abnormal_data())
+        self.controller_window.deiconify()
+
+    def hide_abnormal_values(self):
+        for widget in self.__abnormal_value.winfo_children():
+            widget.destroy()
+
     def get_distribution_data(self):
         return self.distribution_data
 
@@ -95,6 +121,15 @@ class Graph:
 
     def set_frequncy_data(self, data):
         self.frequncy_data = data
+
+    def get_abnormal_data(self):
+        return self.abnormal_data
+
+    def set_abnormal_data(self, data):
+        self.abnormal_data = data
+
+    def get_abnormal_plot(self):
+        self.__abnormal_value
 
     def __eq__(self, __o: object) -> bool:
         return super().__eq__(__o)

@@ -2,7 +2,6 @@ import numpy as np
 import tkinter as tk
 
 import matplotlib.pyplot as plt
-import numpy as np
 from Plot import BasePlot
 from matplotlib.backends.backend_tkagg import NavigationToolbar2Tk
 
@@ -14,8 +13,8 @@ class EmpiricalDistributionPlot(BasePlot):
     def plot(self):
         self.ax.step(self.data[0] , self.data[1], where="pre")
         self.ax.set_title(self.title)
-        self.figure.set_dpi(85)
-        self.figure.set_size_inches(5, 5)
+        self.figure.set_dpi(65)
+        self.figure.set_size_inches(6, 6)
         plt.xlabel('Data Values')
         plt.ylabel('Empirical Distribution Function (EDF)')
         plt.grid(True)
