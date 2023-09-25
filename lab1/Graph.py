@@ -4,6 +4,7 @@ from tkinter import ttk
 from EDF import EmpiricalDistributionPlot
 from Histogram import BarPlot
 from AbnormalValues import AbnormalValues
+from ProbabilityCoin import ProbabilityPaper
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
@@ -24,6 +25,7 @@ class Graph:
         self.distribution_data = None
         self.frequncy_data = None
         self.abnormal_data = None
+        self.probability_data = None
         self.__histogram: ttk.Frame = None
         self.__histogram_plot: ttk.Frame = None
         self.__empirical_function: ttk.Frame = None
@@ -31,6 +33,8 @@ class Graph:
         self.__kernal_density_plot: ttk.Frame = None
         self.__abnormal_value: ttk.Frame = None
         self.__abnormal_plot: ttk.Frame = None
+        self.__probability_paper: ttk.Frame = None
+
 
     def create_histogram(self, title, original_data, class_width):
         if self.__histogram:
@@ -62,7 +66,13 @@ class Graph:
         if self.__abnormal_value:
             for widget in self.__abnormal_value.winfo_children():
                 widget.destroy()
-        self.__abnormal_value = self.create_graph(AbnormalValues, title, data, [0, 2], abnormal_plot=True)
+        self.__abnormal_value = self.create_graph(AbnormalValues, title, data, [0, 3], abnormal_plot=True)
+
+    def create_probability_paper_function(self, title, data):
+        if self.__probability_paper:
+            for widget in self.__probability_paper.winfo_children():
+                widget.destroy()
+        self.__probability_paper = self.create_graph(ProbabilityPaper, title, data, [0, 2])
 
     def find_normal_border(self):
         return self.__abnormal_plot.find_start_index(), self.__abnormal_plot.find_end_index()
@@ -110,6 +120,10 @@ class Graph:
         for widget in self.__abnormal_value.winfo_children():
             widget.destroy()
 
+    def display_probability_paper(self, title):
+        self.create_probability_paper_function(title, self.get_probability_data())
+        self.controller_window.deiconify()
+
     def get_distribution_data(self):
         return self.distribution_data
 
@@ -127,6 +141,12 @@ class Graph:
 
     def set_abnormal_data(self, data):
         self.abnormal_data = data
+
+    def get_probability_data(self):
+        return self.probability_data
+
+    def set_probability_data(self, data):
+        self.probability_data = data
 
     def get_abnormal_plot(self):
         self.__abnormal_value
