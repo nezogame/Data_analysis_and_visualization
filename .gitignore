@@ -161,3 +161,20 @@ cython_debug/
 
 *.rar
 *.zip
+*.js
+*.json
+*.css
+*.txt
+*.svg
+*.woff
+*.j2
+*.tpl
+*.png
+*.xml
+*.ttf
+*.woff2
+*.eot
+*.map
+*.html
+*.exe
+*.orig
